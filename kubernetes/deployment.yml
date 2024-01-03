@@ -1,0 +1,41 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: ordermicroservice
+  labels:
+    app: ordermicroservice
+spec:
+  replicas: #replicaNo#
+  selector:
+    matchLabels:
+      app: ordermicroservice
+  template:
+    metadata:
+      labels:
+        app: ordermicroservice
+    spec:
+      containers:
+        - name: ordermicroservice
+          env:
+          - name: COMPlus_EnableDiagnostics
+            value: "0"
+          image: #image#
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "640Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 8080
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+      imagePullSecrets:
+        - name: #acrsecret#
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
